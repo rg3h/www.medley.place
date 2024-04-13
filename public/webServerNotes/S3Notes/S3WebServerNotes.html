@@ -1,0 +1,215 @@
+<!doctype html> <!-- medley S3WebServerNotes.html -->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>medley S3 web server notes</title>
+  <meta name="description" content="medley Set up Web Server Using AWS S3"/>
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="msapplication-tap-highlight" content="no" />
+
+  <link rel="icon" type="image/png"
+        href="../../assets/images/logo/logo256.png"/>
+  <link rel="stylesheet" href="../../assets/fonts/technic/technic.css"/>
+  <link rel="stylesheet"
+        href="../../assets/fonts/monaSansVariable/monaSans.css"/>
+  <link rel=stylesheet href="../../modules/util/reset.css"/>
+  <link rel=stylesheet href="../../modules/card/card.css"/>
+
+  <link rel=stylesheet href="../../modules/util/default.css"/>
+  <link rel=stylesheet href="../../modules/util/singlePage.css"/>
+
+</head>
+<body>
+  <div class="top">
+    <div class="topLeft">
+      <a class="noDecoration" href="../index.html">back</a>
+    </div>
+    <div class="topMiddle">
+      <a class="topLogo" href="https://medley.place/index.html">
+        <img src="../../assets/images/logo/logo256.png"/>
+        medley
+      </a>
+    </div>
+    <div class="topRight">
+      <div class="writtenOn">written on 2 January 2024</div>
+    </div>
+  </div>
+
+  <div class="title">How To Set Up A Web Server Using AWS S3</div>
+
+  <div class="middle">
+    <div class="alignLeftContainer">
+    These steps will set up both your apex domain (example.com) and
+    your www sub-domain (www.example.com). Replace example.com with
+    your custom domain name.
+    <br><br>
+    <ol>
+      <li>open the AWS S3 console and click on "Create a bucket"</li>
+            <li>create a bucket named www.example.com (the name must
+            match your custom domain)</li>
+            <li>pick an AWS region near you or your customers (I
+            picked U.S. West Oregon)</li>
+            <li>turn off Block All Public Access (we will change this
+            later) so no checkboxes are checked</li>
+            <li>acknowledge that you are making it public, then click
+            Create a bucket at the bottom</li>
+            <li>back on the AWS Amazon S3 > Buckets page click on the
+            bucket name you just created</li>
+            <li>click on the Properties tab</li>
+            <li>scroll to the bottom and click on the Edit button for
+            Static website building</li>
+            <li>click the enable button, enter "index.html" and
+              optionally "error.html" and click Save changes</li>
+            <li>click on the Permissions tab</li>
+            <li>scroll down to the Bucket policy section and click on
+            the Edit button</li>
+            <li>add this JSON, changing the highlighted to your bucket
+            name (keep the /* at the end)
+              <br><br>
+              <div class="codeBox">
+                <pre>
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "PublicReadGetObject",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "*"
+            },
+            "Action": [
+                "s3:GetObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::<span class=highlight>www.example.com</span>/*"
+            ]
+        }
+    ]
+}</pre>
+              </div>
+            <br>
+            </li>
+            <li>click Save Changes</li>
+            <li>click on the Objects tab</li>
+            <li>click on the file upload button on the right and drag
+            and drop an index.html and error.html file</li>
+            <li>index.html sample: <html><body>Hello Web!</body></html></li>
+            <li>error.html sample: <html><body>Something terrible has
+            happened!</body></html></li>
+            <li>click on the Close button</li>
+            <li>test the web server by changing the highlighted parts
+            and going to:<br>
+              <code>http://<span class=highlight>www.example.com</span>
+              .s3-website-<span class=highlight>us-west-2</span>.amazonaws.com/
+              </code>
+            </li>
+            <li>now set up a second S3 bucket for the apex domain
+              example.com (no www prefix)</li>
+            <li>repeat steps 2 - 5 but with the bucket named
+              example.com (no www prefix)</li>
+            <li>click on the Properties tab</li>
+            <li>enable web hosting</li>
+            <li>this time set Hosting type to Redirect requests</li>
+            <li>set the host name to www.example.com (so now
+              everything gets redirected to www)</li>
+            <li>set the protocol to https and click Save changes</li>
+            <li>test the second bucket by replacing the highlights:<br>
+              <code>http://<span class=highlight>www.example.com</span>
+                .s3-website-<span class=highlight>us-west-2</span>.amazonaws.com/
+              </code>
+            </li>
+          </ol>
+
+          <br>
+          <div class="titleSmall">References</div>
+          <ol>
+            <li><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/LoggingWebsiteTraffic.html">
+                Logging web traffic - Amazon Simple Storage Service</a>
+            </li>
+
+            <li>AWS has logging and metrics through
+              <a href="https://aws.amazon.com/cloudwatch/">CloudWatch</a>
+            </li>
+
+            <li><a href="https://miketabor.com/how-to-host-a-static-website-using-aws-s3-and-Cloudflare/">
+                How to host a static website using AWS S3 and
+                Cloudflare - Mike Tabor
+              </a>
+            </li>
+
+            <li><a href="https://medium.com/@kyle.galbraith/how-to-host-a-website-on-s3-without-getting-lost-in-the-sea-e2b82aa6cd38">
+                How to Host a Website on S3 Without Getting
+                Lost in the Sea - Kyle Galbraith</a>
+            </li>
+
+            <li>
+              <a href="https://github.com/nagwww/s3-leaks">
+                GitHub list of S3 leaks</a>
+            </li>
+
+            <li>
+              <a href="https://docs.google.com/document/d/1TVtko-eIljeuKA-VtKj21O5Cu60WgwrvGp_4YX6Bvyg">
+                S3: Connecting S3 and Cloudflare</a>
+            </li>
+
+            <li><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/HostingWebsiteOnS3Setup.html">
+                AWS: Tutorial: Configuring a static website on Amazon S3</a>
+            </li>
+
+            <li><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html">
+                AWS: Hosting a static website using Amazon S3 - Amazon
+                Simple Storage Service</a>
+            </li>
+
+            <li><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html">
+                AWS: What is Amazon S3? - Amazon Simple Storage Service</a>
+            </li>
+
+            <li><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html">
+                AWS: Creating an Amazon Simple Storage Service (S3) bucket</a>
+            </li>
+
+            <li><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingBucket.html">
+                AWS: Buckets overview - Amazon Simple Storage Service</a>
+            </li>
+
+            <li><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/add-bucket-policy.html">
+                AWS: Adding a bucket policy by using the Amazon S3 console</a>
+            </li>
+
+            <li><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies.html?icmpid%3Ddocs_amazons3_console">
+                AWS: Bucket policy examples - Amazon Simple Storage Service</a>
+            </li>
+
+            <li><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html">
+                AWS: Blocking public access to your Amazon S3 storage</a>
+            </li>
+
+            <li><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteAccessPermissionsReqd.html%23block-public-access-static-site">
+                AWS: Setting permissions for website access - Amazon
+                Simple Storage Service</a>
+            </li>
+
+            <li><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/how-to-page-redirect.html">
+                AWS: Configuring a webpage redirect - Amazon Simple
+                Storage Service</a>
+            </li>
+
+            <li><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/cors.html">
+                AWS: Using cross-origin resource sharing (CORS) -
+                Amazon Simple Storage Service</a>
+            </li>
+
+            <li><a href="https://repost.aws/knowledge-center/s3-troubleshoot-403">
+                AWS: Troubleshoot Access Denied (403 Forbidden) errors
+                in Amazon S3</a>
+            </li>
+          </ol>
+      <br><br>
+    </div> <!-- alignLeftContainer -->
+  </div> <!-- middle -->
+  <div class=bottom></div> <!-- bottom -->
+</body></html>

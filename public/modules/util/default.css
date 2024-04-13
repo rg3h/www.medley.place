@@ -1,0 +1,240 @@
+/** modules/util/default.css **/
+
+@keyframes fadeUpAnim {0% {opacity:0;} 100% {opacity:1;}}
+
+:root {    /* colors */
+  --almostBlack:           rgb( 25,  25,  25);
+  --almostWhite:           rgb(250, 250, 250);
+  --almostBlackBg:         background-color: rgb(50, 50, 60);
+  --almostWhiteBg:         background-color: rgb(250, 250, 255);
+
+  --grey150:               rgb(150, 150, 150);
+  --grey200:               rgb(200, 200, 200);
+
+  --extraDarkPurple:       rgb( 45,  10, 100);
+  --darkPurple:            rgb( 95,  50, 130);
+  --purple:                rgb(130,  70, 180);
+  --lightPurple:           rgb(170, 115, 220);
+  --extraLightPurple:      rgb(200, 150, 240);
+  --highlightPurple:       rgb(175,   0, 175);
+  --highlight:             rgb(255, 255,   0);
+
+  --blackRadial: radial-gradient(circle, rgb(73,73,85) 0%, rgb(49,49,57) 100%);
+  --whiteRadial: radial-gradient(circle, white 0%, rgb(230,230,230) 100%);
+}
+
+
+:root {
+  --bgColor:               var(--almostWhite);
+  --fgColor:               var(--purple);
+  --linkColor:             var(--purple);
+
+  --borderRadius:          8px;
+  --border:                solid 1px var(--grey200);
+  --boxShadow:             3px 3px 5px rgb(220, 220, 220);
+
+  --fontFamily:            monaSans;
+  --fontSize:              14px;
+  --fontSizeSmall:         12px;
+}
+
+html {
+  background-color: white;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+body {
+  align-items: center;
+  animation: fadeUpAnim 0.5s ease-in-out 0s forwards;
+  color: var(--fgColor);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--fontFamily);
+  font-size: var(--fontSize);
+  height: 100%;
+  justify-content: flex-start;
+  margin: 0;
+  opacity: 0;
+  padding: 0;
+  position: relative;
+  width: 100%;
+}
+
+/* fix the underline */
+a {
+  color: var(--purple);
+  text-decoration-color: var(--lightPurple);
+  text-decoration-thickness: .025em;
+  text-underline-offset: 1.5px;
+
+  transition-duration: 0.2s;
+  transition-property: color, text-decoration-color;
+  transition-timing-function: ease-in-out;
+}
+
+a:hover {
+  color: var(--extrsDarkPurple);
+  text-decoration-color: var(--extraDarkPurple);
+}
+
+li {
+  margin-top: 0.25em;
+}
+
+table {
+  border: var(--border);
+  border-radius: var(--borderRadius);
+  border-spacing: 0; /* cant use border-collapse and border-radius together */
+}
+
+td, th {
+  border: none;
+  padding: 0.1em 0.5em 0.1em 0.5em;
+  text-align: left;
+}
+
+tr {
+  border-collapse: collapse;
+}
+
+tr:nth-child(even) {
+  background-color: rgb(240, 240, 240);
+}
+
+.background {
+  /* each page sets background-image: url("./assets/images/mountain01.jpg"); */
+  background-size: cover;
+  height: 100%;
+  left: 0;
+  opacity: 0.4;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: -1;
+}
+
+.noDecoration {
+  text-decoration-color: transparent;
+}
+
+.highlight {
+  background-color: yellow;
+}
+
+.indent,
+.indent2 {
+  margin-left: 2em;
+}
+
+.writtenOn,
+.dateContainer {
+  font-family: technic;
+}
+
+.top {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 0;
+  justify-content: space-between;
+  padding: 0.5em 1em 0em 1em;
+  width: 100%;
+}
+
+.topLeft {
+  text-align: left;
+  width: 100%;
+}
+
+.topMiddle {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+
+.topRight {
+  text-align: right;
+  width: 100%;
+}
+
+.topLogo {
+  display: flex;
+  height: 21px;
+  gap: 0.5rem;
+  text-decoration-color: transparent;
+}
+
+.topLogo:hover {
+  color: var(--extrsDarkPurple);
+  text-decoration-color: var(--extraDarkPurple);
+}
+
+.middle {
+  align-items: center;
+  animation: fadeUpAnim 0.5s ease-in 0.5s forwards;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: flex-start;
+  margin: 2rem 0 2rem 0;
+  opacity: 0;
+  overflow: auto;
+  padding: 0 2rem 0 2rem;
+  max-width: 1024px;
+}
+
+.title {
+  font-family: monaSansExtraLight;
+  font-size: 4rem;
+}
+
+.titleSmall {
+  font-family: monaSansExtraLight;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+.quote {
+  font-style: italic;
+}
+
+.codeBox {
+  border-radius: var(--borderRadius);
+  border: var(--border);
+  display: block;
+  font-family: courier new, monospace;
+  font-size: 0.75rem;
+  margin-top: 1rem;
+  max-width: 700px;
+  overflow: auto;
+  padding: 0 1rem 0 1rem;
+  unicode-bidi: embed;
+  white-space: pre;
+}
+
+.cardListH {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 3rem;
+  justify-content: flex-start;
+}
+
+.cardListV {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 32px;
+  max-width: 100%;
+  min-width: 100%;
+  padding: 32px;
+  width: 100%;
+}

@@ -1,0 +1,111 @@
+/** modules/card/card.css **/
+
+:root {
+  --cardBg:                 var(--whiteCardBg);
+  --cardFg:                 var(--whiteCardFg);
+
+  --cardHeight:             250px;
+  --cardWidth:              200px;
+  --cardBorderRadius:       0.5rem;
+  --cardBlur:               blur(10px);
+  --cardFontSize:           12px;
+  --cardTitleFontSize:      16px;
+
+  --blackCardBg:            rgb(40, 40, 45);
+  --blackCardFg:            rgb(250, 250, 250);
+  --whiteCardBg:            rgb(250, 250, 250);
+  --whiteCardFg:            rgb(0, 0, 0);
+}
+
+.cardContainer,
+.cardContainerDisabled {
+  align-items: flex-start;
+  background-color: var(--cardBg);
+  border-radius: var(--cardBorderRadius);
+  border: none;
+  box-shadow: 5px 5px 5px rgb(180, 180, 180), -1px -1px 5px rgb(180, 180, 180);
+  color: var(--cardFg);
+  display: block;
+  flex-direction: row;
+  height: var(--cardHeight);
+  justify-content: flex-start;
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+  text-decoration: none;
+  transform-origin: top;
+  transition-duration: 0.25s;
+  transition-property: transform;
+  transition-timing-function: ease-in-out;
+  width: var(--cardWidth);
+  z-index: 0;
+}
+
+.cardContainer:hover {
+  transform: scale(1.1);
+}
+
+.cardContainerDisabled {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+}
+
+.cardImg {
+  border-radius: inherit;
+  height: 100%;
+  object-fit: cover;
+  position: relative;
+  transition-duration: 0.25s;
+  transition-property: transform;
+  transition-timing-function: ease-in-out;
+  width: 100%;
+  z-index: -1;
+}
+
+.cardContainer:hover .cardImg {    /* change cardImg */
+  transform: scale(1.2);
+}
+
+.cardTitle {
+   background-color: rgba(255, 255, 255, 0.8);
+  color: black;
+  font-family: monaSans;
+  font-size: var(--cardTitleFontSize);
+  left: 0;
+  padding: 0 0 0 0.5rem;
+  position: absolute;
+  text-align: center;
+  top: 0;
+  transition-duration: 0.25s;
+  transition-property: background;
+  transition-timing-function: ease-in-out;
+  width: 100%;
+  z-index: 2;
+}
+
+.cardContainer:hover .cardTitle {    /* change cardTitle */
+   background-color: white;
+}
+
+.cardDescription {
+  background-color: white;
+  bottom: 0;
+  color: black;
+  font-family: monaSans;
+  font-size: var(--cardFontSize);
+  opacity: 0;
+  overflow: auto;
+  padding: 0.25rem;
+  position: absolute;
+  text-align: center;
+  transition-duration: 0.25s;
+  transition-property: background-color, opacity;
+  transition-timing-function: ease-in-out;
+  width: 100%;
+  z-index: 1;
+}
+
+.cardContainer:hover .cardDescription {    /* change cardDescription */
+  opacity: 1;
+}

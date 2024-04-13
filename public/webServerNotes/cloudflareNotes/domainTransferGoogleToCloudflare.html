@@ -1,0 +1,160 @@
+<!doctype html> <!-- medley domainTransferGoogleToCloudflare.html -->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>medley domain transfer notes</title>
+  <meta name="description" content="medley notes"/>
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="msapplication-tap-highlight" content="no" />
+
+  <link rel="icon" type="image/png"
+        href="../../assets/images/logo/logo256.png"/>
+  <link rel="stylesheet" href="../../assets/fonts/technic/technic.css"/>
+  <link rel="stylesheet"
+        href="../../assets/fonts/monaSansVariable/monaSans.css"/>
+  <link rel=stylesheet href="../../modules/util/reset.css"/>
+  <link rel=stylesheet href="../../modules/card/card.css"/>
+
+  <link rel=stylesheet href="../../modules/util/default.css"/>
+  <link rel=stylesheet href="../../modules/util/singlePage.css"/>
+</head>
+<body>
+  <div class="top">
+    <div class="topLeft">
+      <a class="noDecoration" href="../index.html">back</a>
+    </div>
+    <div class="topMiddle">
+      <a class="topLogo" href="https://medley.place/index.html">
+        <img src="../../assets/images/logo/logo256.png"/>
+        medley
+      </a>
+    </div>
+    <div class="topRight">
+      <div class="writtenOn">written on 2 January 2024</div>
+    </div>
+  </div>
+
+  <div class="title">How To Transfer a Domain from Google to Cloudflare</div>
+  <div class="quote">rcg &nbsp; &middot; &nbsp; 2 January, 2024</div>
+
+  <div class="middle">
+    <div class="alignLeftContainer">
+      <div class="titleSmall">
+        Domain Name Prices (USD) <span class="circa">(as of 2 Jan 2024)</span>
+      </div>
+      <table width=300>
+        <tr><th>Domain</th><th>AWS</th><th>Cloudflare</th></tr>
+        <tr><td>app</td><td>-----</td><td>$12</td></tr>
+        <tr><td>builders</td><td>$32</td><td>$25</td></tr>
+        <tr><td>cards</td><td>$29</td><td>$25</td></tr>
+        <tr><td>com</td><td>$13</td><td>$9</td></tr>
+        <tr><td>games</td><td>$29</td><td>$20</td></tr>
+        <tr><td>page</td><td>-----</td><td>$8</td></tr>
+        <tr><td>place</td><td>$20</td><td>$25</td></tr>
+        <tr><td>site</td><td>$20</td><td>$25</td></tr>
+        <tr><td>studio</td><td>$12</td><td>$24</td></tr>
+      </table>
+
+      <div class="titleSmall">Steps To Transfer A Custom Domain</div>
+      <ol>
+        <li>go to your custom domain name on
+          <a target="_blank" href="https://domains.google.com">
+            Google Domains</a>
+        </li>
+        <li>on the left panel click on DNS</li>
+        <li>turn off DNSSEC</li>
+        <li>on the left panel click on Registration settings</li>
+        <li>turn off Privacy protection</li>
+        <li>turn off Domain is locked</li>
+        <li>click on Transfer out > Get auth code and copy it for later</li>
+        <br>
+        <li>Go to your
+          <a target="_blank" href="https://dash.cloudflare.com/">
+            Cloudflare dashboard</a>
+        </li>
+        <li>on the left panel click on Websites</li>
+        <li>click Add a site button</li>
+        <li>enter the domain name without the www (such as example.com)</li>
+        <li>click Free  (this might take a little bit; mine took 3
+          minutes)
+        </li>
+        <li>when the Review your DNS records shows up, click
+          Continue at the bottom
+        </li>
+        <li>note the domain name servers for later (mine were
+          ajay.ns.cloudflare.com and diana.ns.cloudflare.com)
+        </li>
+        <br>
+        <li>go back to <a target="_blank" href="https://domains.google.com">
+            Google Domains</a>
+        </li>
+        <li>on the left panel click on DNS</li>
+        <li>change the underlined Default name servers tab to Custom
+          name servers tab
+        </li>
+        <li>enter the two domain server names from earlier
+          (e.g. ajay.ns.cloudflare.com and diana.ns.cloudflare.com)
+        </li>
+        <li>also on this page click on Switch to these settings</li>
+        <br>
+        <li>go back to the Cloudflare page and click on Done, check
+          nameservers
+        </li>
+        <li>go through the Quick Start Guide: turn on Auto HTTPS,
+          always use HTTPS,  turn on Brotli compression
+        </li>
+        <li>click Check nameservers at the bottom and then wait
+          (mine took ten minutes)
+        </li>
+        <br>
+        <li>when you get a cloudflare email, reload the cloudflare
+          newDomain page to see "Great news!"
+        </li>
+        <li>go to
+          <a target="_blank" href="https://dash.cloudflare.com/">
+            the Cloudflare dashboard</a>
+          by clicking on the Cloudflare logo
+        </li>
+        <br>
+        <li>on the left panel click on Domain Registration >
+          Transfer Domains
+        </li>
+        <li>select the new domain and at the bottom click on Confirm
+          Domains
+        </li>
+        <li>enter the transfer code you copied previously from
+          Google Domains page, then Confirm and proceed
+        </li>
+        <li>accept the defaults and click on Confirm and Finalize
+          Transfer
+        </li>
+        <br>
+        <li>wait for google to email you to confirm the transfer (on
+          mine, about 5 minutes)
+        </li>
+        <li>on the left panel click on DNS >settings and enable DNSSEC</li>
+        <li>click on DNS > Records and set the email records to be
+          restrictive
+        </li>
+      </ol>
+
+      <div class="titleSmall">Additional Commands of Interest</div>
+      Open a shell and run these commands:
+      <br>
+      To see relevant information on yourDomainName: &nbsp;
+      <code>
+        nslookup -type=cname <span class=highlight>yourNewDomain</span>
+      </code>
+      <br>
+      To see the name servers: &nbsp;
+      <code>
+        nslookup -type=ns <span class=highlight>yourNewDomain</span>
+      </code>
+      <br><br>
+    </div> <!-- alignLeftContainer -->
+  </div> <!-- middle -->
+  <div class=bottom></div> <!-- bottom -->
+</body></html>

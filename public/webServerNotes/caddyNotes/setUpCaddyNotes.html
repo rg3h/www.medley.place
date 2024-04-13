@@ -1,0 +1,348 @@
+<!doctype html> <!-- medley setUpCaddyNotes.html -->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>medley set up caddy</title>
+  <meta name="description" content="medley notes"/>
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="msapplication-tap-highlight" content="no" />
+
+  <link rel="icon" type="image/png"
+        href="../../assets/images/logo/logo256.png"/>
+  <link rel="stylesheet" href="../../assets/fonts/technic/technic.css"/>
+  <link rel="stylesheet"
+        href="../../assets/fonts/monaSansVariable/monaSans.css"/>
+  <link rel=stylesheet href="../../modules/util/reset.css"/>
+  <link rel=stylesheet href="../../modules/card/card.css"/>
+
+  <link rel=stylesheet href="../../modules/util/default.css"/>
+  <link rel=stylesheet href="../../modules/util/singlePage.css"/>
+</head>
+<body>
+  <div class="top">
+    <div class="topLeft">
+      <a class="noDecoration" href="../index.html">back</a>
+    </div>
+    <div class="topMiddle">
+      <a class="topLogo" href="https://medley.place/index.html">
+        <img src="../../assets/images/logo/logo256.png"/>
+        medley
+      </a>
+    </div>
+    <div class="topRight">
+      <div class="writtenOn">written on 2 January 2024</div>
+    </div>
+  </div>
+
+  <div class="title">How to Set Up A Caddy Web Server</div>
+  <div class="quote">rcg &nbsp; &middot; &nbsp; 2 January, 2024</div>
+
+  <div class="middle">
+    <br>
+    <div class="alignLeftContainer">
+      Caddy is a powerful, extensible platform to serve your sites,
+      services, and apps. It is written in Go.
+      <br>
+      In addition to being a web server, I've used Caddy with a
+      reverse proxy to Node to perform other web services.
+      <br>
+
+      <div class="titleSmall">Prior To Installing Caddy</div>
+      <ol>
+        <li>log into the remote machine</li>
+        <li><code>sudo apt update</code></li>
+        <li><code>sudo apt dist-upgrade</code></li>
+        <li><code>sudo apt autoclean</code></li>
+        <li><code>sudo apt autoremove</code></li>
+        <li>make sure your A and AAAA DNS records point to this machine</li>
+      </ol>
+      <div class="titleSmall">Install Caddy on Ubuntu</div>
+      <div style="font-size:11px">
+        Note: for other operating systems,
+        <a href="https://caddyserver.com/docs/install">this page</a>
+        shows how to download and install Caddy.
+      </div>
+
+      <ol>
+        <li><code>sudo apt install -y debian-keyring
+            debian-archive-keyring apt-transport-https</code></li>
+
+        <li><code>curl -1sLf
+            'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' |
+            sudo gpg --dearmor -o
+            /usr/share/keyrings/caddy-stable-archive-keyring.gpg</code></li>
+
+        <li><code>curl -1sLf
+            'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt'
+            | sudo tee
+            /etc/apt/sources.list.d/caddy-stable.list</code></li>
+
+        <li><code>sudo apt update</code></li>
+
+        <li><code>sudo apt install caddy</code></li>
+
+        <li><code>sudo setcap CAP_NET_BIND_SERVICE=+eip $(which
+            caddy)</code></li>
+      </ol>
+
+      <div class="titleSmall">Run Caddy (even on reboot)</div>
+      <ol>
+        <li><code>whereis caddy</code></li>
+        <li><code>sudo mv caddy /usr/bin/</code></li>
+        <li><code>caddy version             # tests that it worked</code></li>
+      </ol>
+      <br>
+      Caddy may have created a user and group, but just in case:
+      <ol>
+        <li><code>sudo groupadd --system caddy</code></li>
+        <li><pre>
+sudo useradd --system \
+             --gid caddy \
+             --create-home \
+             --home-dir /var/lib/caddy \
+             --shell /usr/sbin/nologin \
+             --comment "Caddy web server" \
+             caddy
+        </pre></li>
+      </ol>
+
+      Now create the webroot location and some web content:
+      <ol>
+        <li><code>sudo mkdir /var/www</code></li>
+        <li><code>sudo chown ubuntu:caddy /var/www</code></li>
+        <li><code>sudo mkdir /var/www/public</code></li>
+        <li><code>sudo chown ubuntu:caddy /var/www/public</code></li>
+        <li>create some HTML to show:<br>
+          <code>emacs /var/www/public/index.html</code>
+          <div class=codeBox>
+<pre>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Hello from Caddy!&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1 style="font-family:arial; text-align:center;"&gt;
+    This page is being served via Caddy
+  &lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+          </div>
+        </li>
+      </ol>
+      <br>
+      Download the systemd unit file from the Caddy GitHub and run systemctl:
+      <ol>
+        <li><code>sudo sh -c 'curl https://raw.githubusercontent.com/caddyserver/dist/master/init/caddy.service > /etc/systemd/system/caddy.service'</code></li>
+        <li><code>more /etc/systemd/system/caddy.service  # make
+            sure ExecStart and ExecReload are correct</code></li>
+        <li><code>sudo systemctl daemon-reload            #
+            reload systemctl to detect the caddy
+            service</code></li>
+        <li><code>sudo systemctl enable --now caddy       # keep
+            caddy running on a reboot</code></li>
+        <li><code>sudo systemctl status caddy             #
+            verify running</code></li>
+      </ol>
+
+      <div class="titleSmall">Set up the Caddyfile Config</div>
+      Note that the filename is uppercase.
+      <ol>
+        <li><code>cd /etc/caddy</code></li>
+        <li><code>sudo mv Caddyfile CaddyfileOrig</code></li>
+        <li><code>sudo emacs Caddyfile</code>
+          <div class=codeBox>
+http:// {
+    root * /var/www/public
+    encode gzip
+    file_server
+}
+          </div>
+        </li>
+        <br>
+        <li><code>sudo caddy fmt --overwrite Caddyfile</code></li>
+        <li><code>sudo caddy validate</code>
+        <br>I've noticed that logs stop on a simple reload, so do a
+        force stop/start of caddy:</li>
+        <li><code>sudo systemctl stop caddy</code></li>
+        <li><code>sudo systemctl restart caddy</code></li>
+        <li><code>sudo systemctl status caddy</code></li>
+      </ol>
+      <br>
+      You can visit your server’s IP in a web browser to see the page!
+      <div class="titleSmall">A More Detailed Caddyfile And Logging</div>
+      To enable logging, set up the Caddyfile and create directories.
+      Caddy does some nice things to format logs and keep
+      them from filling up your file system.
+      <br>
+      <br>
+      Replace "exampleCom" with your domain name.
+      <br>
+      <br>
+      <ol>
+        <li><code>sudo mkdir /var/www/logs</code></li>
+        <li><code>sudo chown caddy /var/www/logs</code></li>
+        <li><code>sudo mkdir /var/www/logs/caddyLogs</code></li>
+        <li><code>sudo chown caddy /var/www/logs/caddyLogs</code></li>
+        <li><code>sudo mkdir /var/www/logs/exampleComLogs</code></li>
+        <li><code>sudo chown caddy /var/www/logs/exampleComLogs</code></li>
+        <li><code>sudo emacs /etc/caddy/Caddyfile</code>
+          <div class=codeBox>
+# @fileoverview: Caddyfile see also https://caddyserver.com/docs/caddyfile
+#global
+{
+  # enable caddy server logs -- sudo chown caddy this log
+  log {
+    output file /var/www/logs/caddyLogs
+  }
+}
+
+#:80 {
+#example.com {
+http:// {
+  root * /var/www/public   # set the web root path to your site's directory
+  file_server              # enable the static file server.
+  encode gzip              # enable compression
+
+  # enable the site-specific logs -- sudo chown caddy this log
+  log {
+    output file /var/www/logs/exampleComLogs
+  }
+
+  # reverse_proxy localhost:3334  # set up a reverse proxy
+  # php_fastcgi localhost:9000    # serve a PHP site through php-fpm
+}
+
+# example of re-direction but cloudflare and caddy handle it
+#www.example.com {
+#  redir https://example.com
+#}
+          </div>
+        </li>
+        <br>
+        <li><code>sudo caddy fmt --overwrite Caddyfile</code></li>
+        <li><code>sudo caddy validate</code>
+        <br>I've noticed that logs stop on a simple reload, so do a
+        force stop/start of caddy:</li>
+        <li><code>sudo systemctl stop caddy</code></li>
+        <li><code>sudo systemctl restart caddy</code></li>
+        <li><code>sudo systemctl status caddy</code></li>
+      </ol>
+
+      <br>
+      Of Note:
+      <ul>
+        <li>
+          To read the logs:
+          <code>journalctl -u caddy --no-pager | less +G</code>
+        </li>
+
+        <li>
+          The Caddy process will run as the caddy user, which
+          has its <code>$HOME</code>set to <code>/var/lib/caddy</code>
+        </li>
+
+        <li>
+          The default data storage location (for certificates and
+          other state information) will be in
+          <code>/var/lib/caddy/.local/share/caddy</code>
+        </li>
+
+        <li>
+          When Caddy runs as a service it runs as caddy user.
+          It won't have permission to install its root CA
+          certificate to the system trust store. To do this, run
+          <code>sudo caddy trust</code> to install.
+        </li>
+      </ul>
+
+      <div class="titleSmall">Caddy Paths</div>
+      <ul>
+        <li>caddy executable: &nbsp; <code>/usr/bin/caddy</code></li>
+        <li>caddy config file: &nbsp; <code>/etc/caddy/Caddyfile</code></li>
+        <li>web pages: &nbsp; <code>/var/www/public</code></li>
+      </ul>
+
+      <div class="titleSmall">Caddy Service Commands</div>
+      <ul>
+        <li>caddy status: &nbsp;
+          <code>sudo systemctl status caddy</code></li>
+        <li>stop caddy: &nbsp;
+          <code>sudo systemctl stop caddy</code></li>
+        <li>restart caddy: &nbsp;
+          <code>sudo systemctl restart caddy</code></li>
+        <li>gracefully reload caddy: &nbsp;
+          <code>sudo systemctl reload caddy</code></li>
+        <li>see the caddy service config: &nbsp;
+          <code>more /etc/systemd/system/caddy.service</code></li>
+      </ul>
+
+      <div class="titleSmall">Uninstalling Caddy</div>
+      <ol>
+        <li><code>sudo systemctl stop caddy</code></li>
+        <li><code>sudo systemctl disable --now caddy</code></li>
+        <li><code>sudo systemctl daemon-reload</code></li>
+        <li><code>sudo systemctl reset-failed</code></li>
+        <li><code>systemctl cat service</code></li>
+        <li><code>
+            sudo rm /etc/apt/sources.list.d/caddy-stable.list</code></li>
+        <li><code>sudo apt remove caddy</code></li>
+        <li><code>sudo groupdel --system caddy</code></li>
+        <li><code>sudo killall -u caddy</code></li>
+        <li><code>sudo userdel -rf caddy</code></li>
+      </ol>
+
+      <div class="titleSmall">References</div>
+      <ol>
+        <li>
+          <a href="https://caddyserver.com/docs/">
+            Welcome — Caddy Documentation
+          </a>
+        </li>
+        <li>
+          <a href="https://caddyserver.com/docs/install">
+            Install — Caddy Documentation
+          </a>
+        </li>
+        <li>
+          <a href="https://caddyserver.com/docs/getting-started">
+            Getting Started — Caddy Documentation
+          </a>
+        </li>
+        <li>
+          <a href="https://caddyserver.com/docs/running">
+            Keep Caddy Running — Caddy Documentation
+          </a>
+        </li>
+        <li>
+          <a href="https://caddyserver.com/docs/caddyfile-tutorial">
+            Caddyfile Tutorial — Caddy Documentation
+          </a>
+        </li>
+        <li>
+          <a href="https://www.digitalocean.com/community/tutorials/how-to-host-a-website-with-caddy-on-ubuntu-22-04">
+            How To Host a Website with Caddy on Ubuntu 22.04 |
+            DigitalOcean
+          </a>
+        </li>
+        <li>
+          <a href="https://caddy.community/t/how-to-solve-status-403-in-caddy-version-2/9570">
+            How to solve status 403 in Caddy version 2 - Help
+          </a>
+        </li>
+        <li>
+          <a href="https://caddyserver.com/docs/json/">
+            JSON Config Structure - Caddy Documentation
+          </a>
+        </li>
+        <li>
+          <a href="https://caddy.community/c/wiki/13">
+            Caddy Wiki
+          </a>
+        </li>
+      </ol>
+    </div> <!-- alignLeftContainer -->
+  </div> <!-- middle -->
+</body></html>

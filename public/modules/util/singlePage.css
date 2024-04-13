@@ -1,0 +1,15 @@
+/** singlePage.css **/
+
+.title {
+  font-size: 1.75rem;
+  margin-top: 1rem;
+}
+
+.middle {
+  border: var(--border);
+  border-radius: var(--borderRadius);
+  box-shadow: var(--boxShadow);
+  color: black;
+  max-width: 800px;
+  padding: 1rem;
+}

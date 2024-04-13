@@ -1,0 +1,86 @@
+<!doctype html> <!-- medley autoUpdateNotes.html -->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>medley set up caddy</title>
+  <meta name="description" content="medley autoupdate notes"/>
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="msapplication-tap-highlight" content="no" />
+
+  <link rel="icon" type="image/png"
+        href="../../assets/images/logo/logo256.png"/>
+  <link rel="stylesheet" href="../../assets/fonts/technic/technic.css"/>
+  <link rel="stylesheet"
+        href="../../assets/fonts/monaSansVariable/monaSans.css"/>
+  <link rel=stylesheet href="../../modules/util/reset.css"/>
+  <link rel=stylesheet href="../../modules/card/card.css"/>
+
+  <link rel=stylesheet href="../../modules/util/default.css"/>
+  <link rel=stylesheet href="../../modules/util/singlePage.css"/>
+</head>
+<body>
+  <div class="top">
+    <div class="topLeft">
+      <a class="noDecoration" href="../index.html">back</a>
+    </div>
+    <div class="topMiddle">
+      <a class="topLogo" href="https://medley.place/index.html">
+        <img src="../../assets/images/logo/logo256.png"/>
+        medley
+      </a>
+    </div>
+    <div class="topRight">
+      <div class="writtenOn">written on 31 January 2024</div>
+    </div>
+  </div>
+
+  <div class="title">How to Set Up Automatic Updates on Ubuntu</div>
+  <div class="quote">rcg &nbsp; &middot; &nbsp; 31 January, 2024</div>
+
+  <div class="middle">
+    <br>
+    <div class="alignLeftContainer">
+      During the lifetime of an Ubuntu machine, you may need to
+      automatically get and install updates (unattended). This is
+      often true for web servers.
+      <br>
+
+      <div class="titleSmall">Steps</div>
+      <ol>
+        <li>log into the ubuntu machine</li>
+        <li><code>sudo apt update && sudo apt upgrade</code></li>
+        <li><code></code>sudo apt install unattended-upgrades
+        apt-listchanges bsd-mailx (and pick no configuration)</li>
+        <li><code>sudo dpkg-reconfigure -plow unattended-upgrades</code></li>
+        <li><code>
+            sudo emacs /etc/apt/apt.conf.d/50unattended-upgrades<br>
+            &nbsp;&nbsp; Unattended-Upgrade::Automatic-Reboot "true";
+          </code>
+        </li>
+        <li><code>
+            sudo emacs /etc/apt/listchanges.conf<br>
+            &nbsp;&nbsp; email_address=yourEmail@gmail.com
+        </code></li>
+        <li>It would be best if you have a working email server to get
+        an alert. You can always use
+        <a href="https://www.cyberciti.biz/faq/how-to-configure-aws-ses-with-postfix-mta/">AWS SES with Postfix MTA</a> to route email safely.</li>
+        <li>verify it works: <code>sudo unattended-upgrades --dry-run</code></li>
+        <li>reload with the changes: <code>sudo systemctl reload unattended-upgrades.service</code></li>
+      </ol>
+
+      <br>
+
+      <div class="titleSmall">Other things</div>
+      <ol>
+        <li>verify it is running: <code>sudo systemctl status unattended-upgrades.service</code></li>
+        <li>to see the logs: <code>sudo tail -f /var/log/unattended-upgrades/unattended-upgrades.log</code></li>
+        <li>to see the schedule: <code>systemctl | grep -w 'apt'</code></li>
+        <li><code>systemctl cat apt-daily.timer</code></li>
+        <li><code>systemctl cat apt-daily-upgrade.timer</code></li>
+      </ol>
+    </div> <!-- alignLeftContainer -->
+  </div> <!-- middle -->
+</body></html>

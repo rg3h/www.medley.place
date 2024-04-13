@@ -1,0 +1,196 @@
+<!doctype html> <!-- medley setUpLightsail.html -->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>medley set up lightsail</title>
+  <meta name="description" content="medley set up Lightsail"/>
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="msapplication-tap-highlight" content="no" />
+
+  <link rel="icon" type="image/png"
+        href="../../assets/images/logo/logo256.png"/>
+  <link rel="stylesheet" href="../../assets/fonts/technic/technic.css"/>
+  <link rel="stylesheet"
+        href="../../assets/fonts/monaSansVariable/monaSans.css"/>
+  <link rel=stylesheet href="../../modules/util/reset.css"/>
+  <link rel=stylesheet href="../../modules/card/card.css"/>
+
+  <link rel=stylesheet href="../../modules/util/default.css"/>
+  <link rel=stylesheet href="../../modules/util/singlePage.css"/>
+</head>
+<body>
+  <div class="top">
+    <div class="topLeft">
+      <a class="noDecoration" href="../index.html">back</a>
+    </div>
+    <div class="topMiddle">
+      <a class="topLogo" href="https://medley.place/index.html">
+        <img src="../../assets/images/logo/logo256.png"/>
+        medley
+      </a>
+    </div>
+    <div class="topRight">
+      <div class="writtenOn">written on 2 January 2024</div>
+    </div>
+  </div>
+
+  <div class="title">How to Set Up AWS Lightsail as a Virtual Machine</div>
+  <div class="quote">rcg &nbsp; &middot; &nbsp; 2 January, 2024</div>
+
+  <div class="middle">
+    <div class="alignLeftContainer">
+    <div class="titleSmall">Steps</div>
+    <ol>
+      <li><a href="https://lightsail.aws.amazon.com/ls/webapp/home/instances">log into AWS Lightsail</a> and click on Create instance</li>
+      <li>note the zone by the Country flag (e.g. US flag zone:
+        oregon); change if need be</li>
+      <li>select Linux/Unix,  OS Only, Latest Ubuntu (22.04 LTS
+        as of this writing)</li>
+      <li>scroll down and select an instance plan (I picked the
+        least expensive since upscaling is easier)</li>
+      <li>name the instance (e.g. example-com-oregon and click
+        Create instance</li>
+      <li>once created, click on the instance name to get to the
+        instance's dashboard</li>
+      <li>click on the Networking tab and then click on Attach
+        static IP (under the Publc IPV4)</li>
+      <li>give the IP a name (e.g. experiment-com-ip) and click
+        Create and attach</li>
+      <li>go to your DNS register and add records to connect
+        your custom ip name to this static IP:
+        <br><br>
+        <table>
+          <tr><th>Hostname</th><th>Type</th><th>TTL</th><th>Data</th></tr>
+          <tr><td>@</td><td>A</td><td>3600</td><td>55.55.555.555</td></tr>
+          <tr><td>www</td><td>A</td><td>3600</td><td>55.55.555.555</td></tr>
+          <tr><td>@</td><td>AAAA</td><td>3600</td><td>5555:1f55:2e7:1700:76c9:d672:4dd6:5555</td></tr>
+          <tr><td>www</td><td>AAAA</td><td>3600</td><td>5555:1f55:2e7:1700:76c9:d672:4dd6:5555</td></tr>
+        </table>
+        <br>
+      </li>
+      <li>get ssh credentials by going to the Connect tab and
+        click on Download default key</li>
+      <li>save it in your ~/.ssh directory
+        (LightsailDefaultKey-us-west-2.pem)</li>
+      <li>chmod 600 ~/.ssh/LightsailDefaultKey-us-west-2.pem</li>
+      <li>create an alias to ssh to your machine, replacing
+        55.55.555.555 with your static ip:<br>
+        <code>alias sshExampleCom='cd $HOME;ssh -i
+          ./.ssh/LightsailDefaultKey-us-east-2.pem
+          ubuntu@55.55.555.555'</code>
+        <br><br>
+        or create <code>sshExampleCom.bat</code>
+        <div class="codeBox">
+:: sshExampleCom.bat -- ssh to example.com
+@echo off
+ssh -i ~/.ssh/LightsailDefaultKey-us-west-2.pem ubuntu@55.55.555.555
+        </div>
+        <br>
+      </li>
+      <li>if you want to copy local files to the remote machibe,
+        use this one-liner (changing the paths):<br>
+<div class="code">
+rsync --chmod=Du=rwx,Dgo=rx,Fu=rw,Fog=r --exclude={'*~','#*#','.#*'}  --rsync-path="sudo /usr/bin/rsync"
+      -avze "ssh -i <span class=highlight>/cygdrive/c/rcg/.ssh/LightsailDefaultKey-us-west-2.pem</span>"
+      <span class=highlight>/cygdrive/c/rcg/src/projects/www/www.example.com/public/</span>
+      <span class=highlight>ubuntu@55.55.555.555</span>:/var/www/public
+</div>
+      <br>
+      or create <code>rsyncExampleCom.bat</code>
+      <div class="codeBox">
+:: rsyncExampleCom.bat -- sync local to server
+@echo off
+set params=--chmod=Du=rwx,Dgo=rx,Fu=rw,Fog=r --exclude={'*~','#*#','.#*'} --rsync-path="sudo /usr/bin/rsync" -avze
+set key="ssh -i <span class=highlight>/cygdrive/c/rcg/.ssh/LightsailDefaultKey-us-west-2.pem</span>"
+set from=<span class=highlight>/cygdrive/c/rcg/src/projects/www/www.example.com/public/</span>
+set to=<span class=highlight>ubuntu@55.55.555.555</span>:/var/www/public
+      </div>
+      </li>
+    </ol>
+    <br>
+
+    On the remote linux machine run the commands:
+    <ol>
+      <li><code>sudo apt update</code></li>
+      <li><code>sudo apt dist-upgrade</code></li>
+      <li><code>sudo apt autoclean</code></li>
+      <li><code>sudo apt autoremove</code></li>
+      <li><code>sudo reboot</code></li>
+    </ol>
+    <br>
+    ssh to the rebooted instance, then
+    <ol>
+      <li><code>sudo apt install unzip</code></li>
+      <li><code>sudo apt install emacs-nox</code></li>
+    </ol>
+    <br>
+    back on your local machine copy your .emacs.d to the remote:
+    <ol>
+      <li><code>zip ~/.emacs.d</code></li>
+      <li><code>rsync -avze "ssh -i
+          <span class=highlight>~/.ssh/LightsailDefaultKey-us-west-2.pem</span>"
+          ~/.emacs.d.zip
+          <span class=highlight>ubuntu@55.55.555.555</span>:~/emacsConfig.zip</code>
+      </li>
+    </ol>
+    Then back on the remote machine:
+    <ol>
+      <li><code>unzip emacsConfig.zip</code>
+        (creating ~/.emacs.d directory)</li>
+      <li>Then, for example, I edited my .bashrc
+        <code>emacs .bashrc</code>
+        <div class="codeBox">
+#turn off color
+export TERM=xterm-mono
+export EDITOR=emacs
+export PATH=~/bin:$PATH
+
+# set the prompt
+PS1='${debian_chroot:+($debian_chroot)}\u:\w\$ '
+alias cls='clear'
+alias cup='find . -type f -name "*~" -delete -or -name "#*#" -delete; ls -al'
+alias ls='ls -al'
+alias ll='ls -alt'
+alias md='mkdir'
+
+## maybe do these
+#set the ls colors
+#eval "`dircolors -b ~/.dircolors`"
+alias ls='ls --color=auto'
+LS_COLORS=$LS_COLORS:'di=01;32:ln=01;32:ex=00;36:' ; export LS_COLORS
+alias cup='find . -type f -name "*~" -delete -or -name "#*#" -delete; ls -al --color'
+alias ls='ls -al --color'
+alias ll='ls -al --color'
+        </div>
+        <br>
+      </li>
+    </ol>
+    To prepare for a web server:
+    <ol>
+      <li>In the browser, on the AWS Lightsail dashboard for the
+        instance, click on the Networking tab</li>
+      <li>scroll to the firewall rules and add HTTPS TCP 443 for
+        both IPV4 and IPV6</li>
+      <li> Add apache, node, or
+        see <a href="../caddyNotes/setUpCaddyNotes.html">
+          How To Set Up the Caddy Web Server</a>
+      </li>
+    </ol>
+    <br>
+    You might also want to learn more about
+    <a href="https://aws.amazon.com/getting-started/hands-on/control-your-costs-free-tier-budgets/">setting up a cost budget.</a>
+    <br><br>
+
+    <div class="titleSmall">References</div>
+    <ol>
+      <li><a href="https://docs.microsoft.com/en-us/windows/terminal/">An overview on Windows Terminal</a></li>
+      <li><a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-domain-registration">Domain registration in Lightsail</a></li>
+      <li><a href="https://aws.amazon.com/getting-started/hands-on/control-your-costs-free-tier-budgets">How to control your AWS costs with the Free Tier and Budgets</a></li>
+    </ol>
+    <br><br>
+  </div> <!-- alignLeftContainer -->
+  </div> <!-- middle -->
+</body></html>

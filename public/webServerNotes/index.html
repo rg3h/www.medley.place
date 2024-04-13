@@ -1,0 +1,148 @@
+<!doctype html> <!-- medley webServerNotes/index.html -->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>medley web server notes</title>
+  <meta name="description" content="medley web server notes"/>
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="msapplication-tap-highlight" content="no" />
+
+  <link rel="icon" type="image/png" href="../assets/images/logo/logo256.png"/>
+
+  <link rel="stylesheet" href="../assets/fonts/technic/technic.css"/>
+  <link rel="stylesheet" href="../assets/fonts/monaSansVariable/monaSans.css"/>
+  <link rel=stylesheet href="../modules/util/reset.css"/>
+  <link rel=stylesheet href="../modules/card/card.css"/>
+
+  <link rel=stylesheet href="../modules/util/default.css"/>
+  <link rel=stylesheet href="../modules/util/multiCardPage.css"/>
+
+  <style>
+    .background {background-image:url("../assets/images/bg/mountain01c.jpg");}
+  </style>
+
+  <script type="module" src="../modules/util/default.js"></script>
+</head>
+<body>
+  <div class="background"></div>
+
+  <div class="top">
+    <div class="topLeft">
+      <a class="noDecoration" href="../index.html">back</a>
+    </div>
+    <div class="topMiddle">
+      <a class="topLogo" href="https://medley.place/index.html">
+        <img src="../assets/images/logo/logo256.png"/>
+        medley
+      </a>
+    </div>
+    <div class="topRight">
+      <div class="multiCardPageDateContainer">
+        <div class="dateContainer"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="title">web server notes</div>
+  <!-- <div class="quote">this is a quote</div> -->
+
+  <div class="middle">
+    <div class="cardListH">
+      <a class="cardContainer"
+         href="./cloudflareNotes/domainTransferGoogleToCloudflare.html">
+        <div class="cardTitle">Transfer From Google To Cloudflare</div>
+        <img class="cardImg"
+             src="./cloudflareNotes/domainTransferIcon256.jpg"/>
+        <div class="cardDescription">
+          <div class="multiCardPageCirca">(Jan 2024)</div>
+          This shows how to transfer a domain from Google to
+          Cloudflare (~31&nbsp;steps).
+        </div>
+      </a>
+
+      <a class="cardContainer" href="./S3Notes/S3WebServerNotes.html">
+        <div class="cardTitle">Build A Web Server Using AWS S3</div>
+        <img class="cardImg" src="./S3Notes/S3WebServerNotesIcon256.jpg"/>
+        <div class="cardDescription">
+          <div class="multiCardPageCirca">(Jan 2024)</div>
+          How to turn AWS S3 data buckets into web servers (~27&nbsp;steps).
+        </div>
+      </a>
+
+      <a class="cardContainer"
+         href="cloudflareNotes/connectCloudflareToS3.html">
+        <div class="cardTitle">Connect Cloudflare to AWS</div>
+        <img class="cardImg"
+             src="./cloudflareNotes/connectCloudflareToS3Icon256.jpg"/>
+        <div class="cardDescription">
+          <div class="multiCardPageCirca">(Jan 2024)</div>
+          How to connect a Cloudflare domain name to an AWS S3
+          web server, providing additional security, speed, and lower
+          reg. costs (~19 steps).
+        </div>
+      </a>
+
+      <a class="cardContainer" download="./htmlCssJs.zip" href="./htmlCssJs.zip">
+        <div class="cardTitle">
+          Download HTML &middot; CSS &middot; JS Template
+        </div>
+        <img class="cardImg" src="./htmlCssJsIcon256.jpg"/>
+        <div class="cardDescription">
+          <div class="multiCardPageCirca">(Jan 2024)</div>
+          Download a small zip file that has simple HTML, CSS, and JS
+          to get started.
+        </div>
+      </a>
+
+      <a class="cardContainer" href="./lightsailNotes/setUpLightsail.html">
+        <div class="cardTitle">Set Up A Lightsail Virtual Machine</div>
+        <img class="cardImg"
+             src="./lightsailNotes/lightsailNotesIcon256.jpg"/>
+        <div class="cardDescription">
+          <div class="multiCardPageCirca">(Jan 2024)</div>
+          set up a virtual machine using AWS Lightsail (~28&nbsp;steps).
+        </div>
+      </a>
+
+      <a class="cardContainer" href="./autoUpdateNotes/autoUpdateNotes.html">
+        <div class="cardTitle">Set Up Automatic Updates</div>
+        <img class="cardImg"
+             src="./autoUpdateNotes/autoUpdateIcon256.jpg"/>
+        <div class="cardDescription">
+          <div class="multiCardPageCirca">(Jan 2024)</div>
+          Set up automatic updates and rebooting on an ubuntu machine.
+          (~9&nbsp;steps).
+        </div>
+      </a>
+
+      <a class="cardContainerDisabled" href="./nginx/setUpNginXNotes.html">
+        <div class="cardTitle">Add an nginx Server</div>
+        <img class="cardImg"
+             src="./nginxNotes/nginxIcon256.jpg"/>
+        <div class="cardDescription">
+          <div class="multiCardPageCirca">(May 2024)</div>
+          nginx is an HTTP server, a mail server, and
+          a generic TCP/UDP server.
+          (~30&nbsp;steps).
+        </div>
+      </a>
+
+      <a class="cardContainer" href="./caddyNotes/setUpCaddyNotes.html">
+        <div class="cardTitle">Add A Caddy Server</div>
+        <img class="cardImg"
+             src="./caddyNotes/caddyIcon256.jpg"/>
+        <div class="cardDescription">
+          <div class="multiCardPageCirca">(Jan 2024)</div>
+          Caddy is a powerful, simple-to-configure web server
+          (~30&nbsp;steps).
+        </div>
+      </a>
+
+    </div> <!-- cardListH -->
+  </div> <!-- middle -->
+  <div class="bottom"></div>
+</body>
+</html>

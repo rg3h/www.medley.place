@@ -1,0 +1,12 @@
+/** multiCardPage.css **/
+
+.multiCardPageCirca {
+  display: inline;
+  font-style: italic;
+  font-size: var(--fontSizeSmall);
+  margin-right: 0.25rem;
+}
+
+.multiCardPageDateContainer {
+  font-weight: bold;
+}

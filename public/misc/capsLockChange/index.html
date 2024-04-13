@@ -1,0 +1,54 @@
+<!doctype html> <!-- htmlCssJs main index.html -->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>HTML CSS JS</title>
+  <meta name="description" content="this is htmlCssJs"/>
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="msapplication-tap-highlight" content="no" />
+
+  <link rel="icon" type="image/png"
+        href="../../assets/images/logo/logo256.png"/>
+
+  <link rel="stylesheet" href="../../assets/fonts/technic/technic.css"/>
+  <link rel="stylesheet"
+        href="../../assets/fonts/monaSansVariable/monaSans.css"/>
+  <link rel=stylesheet href="../../modules/util/reset.css"/>
+  <link rel=stylesheet href="../../modules/card/card.css"/>
+
+  <link rel=stylesheet href="../../modules/util/default.css"/>
+  <link rel=stylesheet href="../../modules/util/singlePage.css"/>
+
+  <script type="module" src="../../modules/util/default.js"></script>
+</head>
+  <body>
+
+  <div class="top">
+    <div class="topLeft">
+      <a class="noDecoration" href="../index.html">back</a>
+    </div>
+    <div class="topMiddle">
+      <a class="topLogo" href="https://medley.place/index.html">
+        <img src="../../assets/images/logo/logo256.png"/>
+        medley
+      </a>
+    </div>
+    <div class="topRight">
+      <div class="writtenOn">written on 13 March 2010</div>
+    </div>
+  </div>
+
+  <div class="title">regedit the caps-lock key into a control key</div>
+  <div class="quote">rcg &nbsp; &middot; &nbsp; 13 March 2010</div>
+
+  <div class="middle">
+    <pre style="font-size:12px; margin-top:8px;">
+regedit HKEY_LOCAL_MACHINE/System/CurrentControlSet/Control/keyboard layout
+click on it and add a new binary key named Scancode Map
+Set the key to: 00 00 00 00 | 00 00 00 00 | 02 00 00 00 | 1D 00 3A 00 | 00 00 00 00</pre>
+  </div> <!-- middle -->
+  </body>
+</html>

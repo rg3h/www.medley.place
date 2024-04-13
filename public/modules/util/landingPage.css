@@ -1,0 +1,23 @@
+/** modules/util/landingPage.css **/
+
+
+.landingPageBackground {
+  background-image: url("../../assets/images/bg/mountain04c.jpg");
+}
+
+.landingPageTop {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.landingPageTitle {
+  font-family: monaSansExtraLight;
+  font-size: 4rem;
+  margin-bottom: -1rem;
+}
+
+.landingPageDateContainer {
+}

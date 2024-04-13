@@ -1,0 +1,171 @@
+<!doctype html> <!-- medley connectCloudflareToS3.html -->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>medley connectCloudflareToS3</title>
+  <meta name="description" content="medley connect Cloudflare to S3"/>
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="msapplication-tap-highlight" content="no" />
+
+  <link rel="icon" type="image/png"
+        href="../../assets/images/logo/logo256.png"/>
+  <link rel="stylesheet" href="../../assets/fonts/technic/technic.css"/>
+  <link rel="stylesheet"
+        href="../../assets/fonts/monaSansVariable/monaSans.css"/>
+  <link rel=stylesheet href="../../modules/util/reset.css"/>
+  <link rel=stylesheet href="../../modules/card/card.css"/>
+
+  <link rel=stylesheet href="../../modules/util/default.css"/>
+  <link rel=stylesheet href="../../modules/util/singlePage.css"/>
+</head>
+<body>
+  <div class="top">
+    <div class="topLeft">
+      <a class="noDecoration" href="../index.html">back</a>
+    </div>
+    <div class="topMiddle">
+      <a class="topLogo" href="https://medley.place/index.html">
+        <img src="../../assets/images/logo/logo256.png"/>
+        medley
+      </a>
+    </div>
+    <div class="topRight">
+      <div class="writtenOn">written on 2 January 2024</div>
+    </div>
+  </div>
+
+  <div class="title">Connect Cloudflare To An AWS S3 Web Server</div>
+  <div class="quote">rcg &nbsp; &middot; &nbsp; 2 January, 2024</div>
+
+  <div class="middle">
+    <div class="alignLeftContainer">
+      <div class="titleSmall">
+        Domain Name Prices (USD) <span class="circa">(as of 2 Jan 2024)</span>
+      </div>
+
+      Once you have created the AWS S3 web server and have a cloudflare
+      registered custom domain name, then  the next step is to connect
+      the two together.
+      <br><br>
+
+      <center>
+        <img align=center src="./connectCloudflareToS3.png">
+      </center>
+      <br>
+
+      Replace example.com with your custom domain name.
+      <br><br>
+
+      <div class=noteCardWideContainer>
+        <div class="noteCardWideRight">
+          <div class="titleSmall">Steps To Transfer A Custom Domain</div>
+          <div class="noteCardWideDescription">
+            Cloudflare Steps:
+            <ol>
+              <li>on cloudflare's home page, click  on the example.com
+                site you have already created with cloudflare</li>
+              <li>on the left panel, click on DNS</li>
+              <li>If there are any existing records delete them</li>
+              <li>click on Add record and add:<br>
+                Type: CNAME<br>
+                Name: www<br>
+                Target: <span class="highlight">www.example.com.s3-website-us-west-2</span>.amazonaws.com
+              </li>
+              <li>note the bucket name has no https:// in the front and
+                no "/" at the end</li>
+              <li>click on Add record and add a second record for
+                example.com (no www prefix):<br>
+                Type: CNAME<br>
+                Name: <span class="highlight">example.com</span><br>
+                Target: <span class="highlight">example.com.s3-website-us-west-2</span>.amazonaws.com<br>
+              </li>
+              <li>on the left panel select DNS > Settings and confirm
+                the DNSSEC is on</li>
+              <li>on the left panel select SSL/TLS > Overview and
+                confirm that the mode is Flexible</li>
+              <li>on the left panel select SSL/TLS > Edge Certificates
+                and confirm that Always Use HTTPS is on</li>
+            </ol>
+            <br>
+            AWS Steps:
+            <ol>
+              <li>on AWS S3 click on your www.example.com S3 bucket</li>
+              <li>under the Permissions tab click on Block public access
+                Edit button</li>
+              <li>uncheck everything, then check the first two:</li>
+              <li>Block public access to buckets and objects granted
+                through new access control lists (ACLs)</li>
+              <li>Block public access to buckets and objects granted
+                through any access control lists (ACLs)</li>
+              <li>click Save changes</li>
+              <li>still under the Permissions tab, click on Bucket
+                Policy Edit button</li>
+              <li>replace the JSON so we only use the current cloudflare
+                servers. (this example is as of 7 Dec 2023)</li>
+              <li>replace the highlighted text with your custom url and
+                a "/*" at the end
+                <br><br>
+                <div class="codeBox">
+<pre>
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "CloudFlareReadGetObject",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "*"
+      },
+      "Action": "s3:getObject",
+      "Resource": "arn:aws:s3:::<span class="highlight">www.example.com</span>/*",
+      "Condition": {
+        "IpAddress": {
+          "aws:SourceIp": [
+            "2400:cb00::/32",
+            "2405:8100::/32",
+            "2405:b500::/32",
+            "2606:4700::/32",
+            "2803:f800::/32",
+            "2a06:98c0::/29",
+            "2c0f:f248::/32",
+            "103.21.244.0/22",
+            "103.22.200.0/22",
+            "103.31.4.0/22",
+            "104.16.0.0/13",
+            "104.24.0.0/14",
+            "108.162.192.0/18",
+            "131.0.72.0/22",
+            "141.101.64.0/18",
+            "162.158.0.0/15",
+            "172.64.0.0/13",
+            "173.245.48.0/20",
+            "188.114.96.0/20",
+            "190.93.240.0/20",
+            "197.234.240.0/22",
+            "198.41.128.0/17"
+          ]
+        }
+      }
+    }
+  ]
+}</pre>
+                </div>
+              </li>
+              <br>
+              <li>click Save changes</li>
+            </ol>
+          </div> <!-- noteCardWideDescription -->
+        </div>  <!-- noteCardWideRight -->
+      </div> <!-- noteCardWideContainer -->
+      <br>
+      You can no longer access the site through
+      http://www.example.com.s3-website-us-west-2.amazonaws.com/ but now
+      can access it through www.example.com (since cloudflare has access
+      to this S3 bucket).
+      <br><br>
+    </div> <!-- alignLeftContainer -->
+  </div> <!-- middle -->
+</body></html>
