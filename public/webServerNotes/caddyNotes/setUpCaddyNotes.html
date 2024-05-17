@@ -211,6 +211,12 @@ http:// {
     output file /var/www/logs/exampleComLogs
   }
 
+  handle_errors {
+    # make all errors (404, etc) go to error.html
+    rewrite * /error.html
+    file_server
+  }
+
   # reverse_proxy localhost:3334  # set up a reverse proxy
   # php_fastcgi localhost:9000    # serve a PHP site through php-fpm
 }
@@ -229,6 +235,7 @@ http:// {
         <li><code>sudo systemctl stop caddy</code></li>
         <li><code>sudo systemctl restart caddy</code></li>
         <li><code>sudo systemctl status caddy</code></li>
+        <li>create /var/www/error.html</li>
       </ol>
 
       <br>

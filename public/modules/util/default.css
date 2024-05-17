@@ -10,6 +10,7 @@
 
   --grey150:               rgb(150, 150, 150);
   --grey200:               rgb(200, 200, 200);
+  --grey240:               rgb(240, 240, 240);
 
   --extraDarkPurple:       rgb( 45,  10, 100);
   --darkPurple:            rgb( 95,  50, 130);
@@ -33,7 +34,10 @@
   --border:                solid 1px var(--grey200);
   --boxShadow:             3px 3px 5px rgb(220, 220, 220);
 
-  --fontFamily:            monaSans;
+  --fontFamily:           monaSans;
+  --fontFamilyLight:      monaSansLight;
+  --fontFamilyExtraLight: monaSansExtraLight;
+
   --fontSize:              14px;
   --fontSizeSmall:         12px;
 }
