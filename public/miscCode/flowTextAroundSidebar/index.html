@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>flowingText</title>
+  <title>templateWebApp</title>
+  <meta name="description"                  content="flowing text around a moving sidebar"/>
+  <meta name="mobile-web-app-capable"       content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="msapplication-tap-highlight"  content="no"  />
+  <meta name="description"                  content="flowing text around a moving sidebar"/>
+  <meta name="theme-color"                  content="#FFCCCC">
+  <meta property="og:title"                 content="flowingText">
+  <meta property="og:description"           content="flowing text around a moving sidebar"/>
+  <meta property="og:image"                 content="./assets/images/logo.png">
+  <meta property="og:url"                   content="www.medley.com/howTo/flowTextAroundASideBar/index.html">
+
+  <link rel="apple-touch-icon" href="./assets/images/logo.png"/>
+  <link rel="icon"             href="./assets/images/logo.png"/>
+  <link rel="stylesheet"       href="./assets/fonts/monaSans/monaSans.css"/>
+  <link rel="stylesheet"       href="./index.css"/>
+  <script type="module"        src="./main.js"></script>
+
+</head>
+<body>
+  <div class="middle">   <!-- this is the white page -->
+    <div class="titleContainer">
+      <img class="titleImg" src="./assets/images/logo.png">
+      <div class="titleText">
+        Changing Text Flow Around a Sidebar<br>
+        When Resizing the Window</div>
+      <div class="titleDate"></div>
+    </div>
+
+    <h2>Problem</h2>
+    We want a sidebar to be on the right side of the page, but when
+    the page gets narrow (say on a mobile device), then we want the
+    sidebar to tuck under the text.
+    <div class="sideBySideFigureSection">
+      <div class="sideBySideContainer">
+        <img class="sideBySideImage" src="assets/images/sidebarOnRight.jpg" />
+        <br>
+        wide window: sidebar on the right
+      </div>
+      <div class="sideBySideContainer">
+        <img class="sideBySideImage" src="assets/images/sidebarUnder.jpg" />
+        <br>
+        narrow window: sidebar in between
+      </div>
+    </div>
+
+    <br>
+    The first element in the DOM has a red background.<br>
+    The sidebar element has a green background.<br>
+    The third element has a blue background.<br>
+    These three elements are encompassed within a dark grey container
+    for illustration purposes.<br>
+    Text with a white background follows after that.<br>
+    <br>
+    Using a simple css float style on the green sidebar does not work
+    since the float element must appear before the first (red) text
+    element in the DOM to be able to float to the right of it.
+    <br><br>
+    But for the mobile layout, the sidebar element must
+    be <i>after</i> the red element in the DOM. Then it appears
+    under the  first (red) text element.
+    <br>
+    <div class="sideBySideContainer">
+      <img class="sideBySideImage" src="assets/images/sidebarNotTucking.jpg">
+      <br>
+      narrow window: sidebar failing to tuck under the red
+    </div>
+
+    <h2>Solution</h2>
+    The flexbox allows us  to change the order of elements using
+    the <code>order:</code> field.  We can use float when the window is
+    wide, and then change the parent of the sidebar to be a
+    flexbox. Then we can change the order of the elements:
+    <pre>
+/* detect narrow */
+@media screen and (max-width: 600px) {
+  .sidebarAndTextSection {display:flex; flex-direction: column;}
+  .text1   {order: 1;}
+  .sidebar {align-self: center; order: 2;}
+  .text2   {order: 3;}
+}
+    </pre>
+
+    Here is a demo of the solution:&nbsp;&nbsp;
+    <a href="flowUsingFloatAndFlex/index.html">flow using float and flex</a>
+  </div> <!-- middle -->
+</body>
+</html>

@@ -1,23 +1,23 @@
-/**
- * @fileoverview node simpleServer.js serves files and /cmd
- */
+// @fileoverview node simpleServer.js serves files and /cmd
 'use strict';
 
-const execSync = require('child_process').execSync
-const fs = require('fs');
-const http = require('http');
-const https = require('https');
-const os = require('os');
-const pathObj = require('path');
-const { parse } = require('querystring');
-const urlObj = require('url');
+//const execSync = require('child_process').execSync
+const {execSync} = require('child_process'); // eslint-disable-line no-undef
+const fs = require('fs');                    // eslint-disable-line no-undef
+const http = require('http');                // eslint-disable-line no-undef
+const https = require('https');              // eslint-disable-line no-undef
+const os = require('os');                    // eslint-disable-line no-undef
+const pathObj = require('path');             // eslint-disable-line no-undef
+const { parse } = require('querystring');    // eslint-disable-line no-undef
+const urlObj = require('url');               // eslint-disable-line no-undef
 
-const APPNAME = 'simpleServer';
-const VERSION = '3.0.1';
+// const APPNAME = 'simpleServer';
+// const VERSION = '3.0.1';
 const SECURE_PORT = 8000;
 const REG_PORT    = 8001;
 let ipAddressList = [];
 
+// eslint-disable-next-line no-undef
 let webRoot = frontSlash(pathObj.normalize(__dirname + '/'));
 main();
 
@@ -27,10 +27,21 @@ function main() {
   console.log(getDate(false));
   console.log('webroot:', webRoot);
 
+  let cmd = 'openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 ' +
+    '-subj "/C=US/ST=ofMind/L=whereever/O=Company/CN=localhost" ' +
+    '-keyout key.pem -out cert.pem 2> NUL';
+  // let result = execSync(cmd).toString();  // returns the stdout of the cmd
+  execSync(cmd).toString();  // returns the stdout of the cmd
+  // console.log('result', result);
+
   const options = {
     key: fs.readFileSync('key.pem'),
     cert: fs.readFileSync('cert.pem')
   };
+
+  cmd = 'rm -f ./csr.pem ./key.pem ./cert.pem'
+  // result = execSync(cmd).toString();
+  execSync(cmd).toString();
 
   ipAddressList = getIpAddressList();
   if (ipAddressList.length < 1) {
@@ -48,12 +59,15 @@ function main() {
 function processArgs() {
   let param;
 
+  // eslint-disable-next-line no-undef
   for (let i = 2, len = process.argv.length; i < len; ++i) {
-    switch(process.argv[i].toLowerCase()) {
+    switch(process.argv[i].toLowerCase()) {   // eslint-disable-line no-undef
     case '-wr':
     case '-webroot':
     case '--webroot':
+      // eslint-disable-next-line no-undef
       param = process.argv[++i] || ''; // get next param as the webroot
+      // eslint-disable-next-line no-undef
       webRoot = frontSlash(pathObj.normalize(__dirname + '/' + param + '/'));
       break;
     }
@@ -61,6 +75,7 @@ function processArgs() {
 }
 
 function frontSlash(inputString) {
+  // eslint-disable-next-line no-control-regex
   const hasNonAscii = /[^\u0000-\u0080]+/.test(inputString);
   const isExtendedLengthPath = /^\\\\\?\\/.test(inputString);
 
@@ -84,6 +99,7 @@ function getIpAddressList() {
   return list;
 }
 
+// eslint-disable-next-line no-unused-vars
 function isNumeric(n) {
   return !isNaN(n) && !isNaN(parseFloat(n));
 }
@@ -130,18 +146,27 @@ function send(response, msg, suffix) {
   case '.cjs':   head['Content-Type'] = 'text/javascript; charset=utf-8'; break;
   case '.css':   head['Content-Type'] = 'text/css; charset=utf-8'; break;
   case '.csv':   head['Content-Type'] = 'text/csv; charset=utf-8'; break;
+  case '.ico':   head['Content-Type'] =
+      'image/vnd.microsoft.icon; charset=utf-8'; break;
+  case '.jpeg':  head['Content-Type'] = 'image/jpeg; charset=utf-8'; break;
   case '.jpg':   head['Content-Type'] = 'image/jpeg; charset=utf-8'; break;
   case '.js':    head['Content-Type'] = 'text/javascript; charset=utf-8'; break;
   case '.json':  head['Content-Type'] = 'application/json; charset=utf-8';break;
+  case '.mid':   head['Content-Type'] = 'audio/midi; charset=utf-8'; break;
+  case '.midi':  head['Content-Type'] = 'audio/midi; charset=utf-8'; break;
   case '.mjs':   head['Content-Type'] = 'text/javascript; charset=utf-8'; break;
+  case '.mp3':   head['Content-Type'] = 'audio/mp3; charset=utf-8'; break;
   case '.mp4':   head['Content-Type'] = 'video/mp4; charset=utf-8'; break;
   case '.otf':   head['Content-Type'] = 'font/otf; charset=utf-8'; break;
   case '.png':   head['Content-Type'] = 'image/png; charset=utf-8'; break;
+  case '.pdf':   head['Content-Type'] = 'application/pdf; charset=utf-8'; break;
   case '.svg':   head['Content-Type'] = 'image/svg+xml; charset=utf-8'; break;
+  case '.ttf':   head['Content-Type'] = 'font/ttf; charset=utf-8'; break;
   case '.wav':   head['Content-Type'] = 'audio/wav; charset=utf-8'; break;
-  case '.webp':  head['Content-Type'] = 'video/webp; charset=utf-8'; break;
+  case '.webp':  head['Content-Type'] = 'image/webp; charset=utf-8'; break;
   case '.woff':  head['Content-Type'] = 'font/woff; charset=utf-8'; break;
   case '.woff2': head['Content-Type'] = 'font/woff2; charset=utf-8'; break;
+  case '.zip':   head['Content-Type'] = 'application/zip; charset=utf-8'; break;
   default:       head['Content-Type'] = 'text/html; charset=utf-8';
   }
 
@@ -182,6 +207,8 @@ function handlePostRequest(request, response) {
     console.log(data);
 
     // allow local host
+    let port = 666;
+    let isSecure = true;
     let protocol = 'http' + (isSecure ? 's' : '') + '://';
     let url = protocol + 'localhost:' + port;
     response.setHeader('Access-Control-Allow-Origin', url);
@@ -211,9 +238,9 @@ function handleFileRequest(fileName, paramObj, response) {
     status = readTheFile(pathName);
   }
 
-  let shortPath = pathName;
-  shortPath = shortPath.replace("C:/rcg/src/projects", "...");
-  shortPath = shortPath.replace("dev/client", "...");
+  // let shortPath = pathName;
+  // shortPath = shortPath.replace("C:/rcg/src/projects", "...");
+  // shortPath = shortPath.replace("dev/client", "...");
   if (status.err) {
     const msg = ['error reading', pathName, status.msg].join(' ');
     console.error(msg);
@@ -278,6 +305,7 @@ function writeTheFile(pathName, data) {
   return status;
 }
 
+// eslint-disable-next-line no-unused-vars
 function handleCmdRequest(paramObj, response) {
   let results = {};
   console.log('*********************CMD', paramObj);
@@ -299,7 +327,7 @@ function handleCmdRequest(paramObj, response) {
     // data = execSync(cmd, {encoding: 'UTF-8'});
   } catch(error) {
     if (error.status === 2) {
-      dataError = 'unknown python command ' + pythonCmd;
+      dataError = 'unknown python command ' + param;
     }
   }
 
