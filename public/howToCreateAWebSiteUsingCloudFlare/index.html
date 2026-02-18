@@ -1,0 +1,67 @@
+<!DOCTYPE html> <!-- howToCreateAWebSiteUsingCloudFlare/index.html -->
+<html lang="en">
+<head>
+<!--
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⣿⣿⣿⡀⠀⠀⠀⠀⣠⣷⣦⣄⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣶⣤⣤⣶⣿⣿⣿⣿⠏⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⣠⣶⣤⣀⣀⣠⣼⣿⠿⠛⠋⠉⠉⠙⠛⠿⣿⣿⣿⡟⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⣰⣿⣿⣿⣿⣿⡿⠋⣡⡴⠞⠛⠋⠙⠛⠳⢦⣄⠙⢿⣷⣀⠀⠀⠀⢀⠀⠀oooo                                     .oooo.
+⠀⠀⠈⠙⢿⣿⣿⠟⢠⡾⠁⠀⠀⠀⠀⠀⠀⠀⠀⠈⢷⡄⠻⣿⣿⣿⣿⣿⡆⠀`888                                   .dP""Y88b
+⠀⠀⠀⠀⠈⣿⡟⠀⣾⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢿⡀⢻⣿⣿⣿⣿⣷⠀ 888 .oo.    .ooooo.  oooo oooo    ooo       ]8P'
+⠀⠀⠀⢀⣼⣿⡇⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⢸⣿⡿⠋⠀⠀⠀ 888P"Y88b  d88' `88b  `88. `88.  .8'      .d8P'
+⠀⢶⣾⣿⣿⣿⣧⠀⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⠁⣸⣿⡀⠀⠀⠀⠀ 888   888  888   888   `88..]88..8'     .dP'
+⠀⠸⣿⣿⣿⣿⣿⣆⠘⣧⡀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣼⠃⣰⣿⣿⣷⣄⠀⠀⠀ 888   888  888   888    `888'`888'    .oP     .o
+⠀⠀⠉⠀⠀⠀⠙⢿⣷⣌⠛⠶⣤⣀⣀⣀⣀⣤⡴⠛⣡⣾⣿⣿⣿⣿⣿⡟⠀⠀o888o o888o `Y8bod8P'     `8'  `8'     8888888888
+⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣷⣦⣄⣉⣉⣉⣉⣠⣴⣾⡿⠛⠋⠛⠻⢿⠏⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⣠⣿⣿⣿⣿⡿⠿⠿⢿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀www.how2.place/howToCreateAWebSiteUsingCloudFlare
+⠀⠀⠀⠀⠀⠀⠈⠛⠿⣿⠏⠀⠀⠀⠀⠙⣿⣿⣿⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠛⠋⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+-->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>how2</title>
+  <meta name="description" content="how2"/>
+  <meta name="mobile-web-app-capable"       content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="msapplication-tap-highlight"  content="no"  />
+  <meta name="description"                  content="how2"/>
+  <meta name="theme-color"                  content="#FFCCCC">
+  <meta property="og:title"                 content="how2">
+  <meta property="og:description"           content="how2">
+  <meta property="og:image"       content="../assets/images/logo/logo.png">
+  <meta property="og:url"         content="www.how2.com/howToCreateAWebSiteUsingCloudFlare">
+
+  <link rel="apple-touch-icon" href="../assets/images/logo/logo.png"/>
+  <link rel="icon"             href="../assets/images/logo/logo.png"/>
+  <link rel="stylesheet"       href="../assets/fonts/monaSans/monaSans.css"/>
+  <link rel="stylesheet"       href="../modules/default/reset.css"/>
+  <link rel="stylesheet"       href="../modules/color/color.css"/>
+  <link rel="stylesheet"       href="../modules/card/card.css"/>
+  <link rel="stylesheet"       href="../modules/default/default.css"/>
+  <link rel="stylesheet"       href="./index.css"/>
+  <script type="module"        src="../modules/default/main.js"></script>
+</head>
+
+<body>
+  <div class="middle">
+    <div class="titleContainer">
+      <div class="titleLeft">
+        <img class="titleImg" src="../assets/images/logo/logo.png" alt="logo" />
+      </div>
+      <div class="titleMiddle">
+        <div class="titleText">How To Create A WebSite Using CloudFlare</div>
+        <div class="subTitle">yep, yep, yep.</div>
+      </div>
+       <div class="titleRight">
+        <div class="titleDate"></div>
+      </div>
+    </div> <!-- titleContainer -->
+
+    <div class=welcomeBanner>Welcome!</div>
+    <div style="text-align:center;margin:0 0 2rem 0;">
+      Placeholder for instructions on how to create a website using cloudflare.
+    </div>
+  </div> <!-- middle -->
+</body>
+</html>
