@@ -51,7 +51,7 @@
   user-select: none;
 }
 
-.cardImg {
+.cardImg, .cardImgContain {
   border-radius: inherit;
   height: 100%;
   object-fit: cover;
@@ -63,7 +63,15 @@
   z-index: -1;
 }
 
+.cardImgContain {
+  object-fit: contain;
+}
+
 .cardContainer:hover .cardImg {    /* change cardImg */
+  transform: scale(1.2);
+}
+
+.cardContainer:hover .cardImgContain {    /* change cardImgContain */
   transform: scale(1.2);
 }
 
